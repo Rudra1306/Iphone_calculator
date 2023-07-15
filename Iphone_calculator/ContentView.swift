@@ -7,15 +7,27 @@
 
 import SwiftUI
 
+
+
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
+            VStack{
+                HStack{
+                    Spacer()
+                    // Make Text Display
+                    Text("0")
+                        .font(.system(size: 64))
+                        .foregroundColor(.white)
+                        .bold()
+                }
+                .padding()
+                
+                
+                //  Make Buttons
+            }
         }
-        .padding()
     }
 }
 
