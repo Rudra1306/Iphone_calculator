@@ -27,9 +27,23 @@ enum CalcButtons: String {
     case remainder = "%"
     case negative = "+/-"
     case clear = "C"
+    
+    var buttonColor: Color {
+        switch self {
+        case .add, .sub, .multipy, .divide, .equal:
+            return .orange
+        case .clear, .negative, .remainder:
+            return Color(.lightGray)
+        default:
+            return Color(UIColor(red: 55/255.0, green: 55/255.0, blue: 55/255.0, alpha: 1))
+        }
+    }
+    
 }
 
 struct ContentView: View {
+    
+    @State var value = "0"
     
     let buttons: [[CalcButtons]] = [
         
@@ -48,10 +62,10 @@ struct ContentView: View {
                 HStack{
                     Spacer()
                     // Make Text Display
-                    Text("0")
-                        .font(.system(size: 64))
-                        .foregroundColor(.white)
+                    Text(value)
                         .bold()
+                        .font(.system(size: 100))
+                        .foregroundColor(.white)
                 }
                 .padding()
                 
@@ -65,6 +79,8 @@ struct ContentView: View {
                         ForEach(rows,  id: \.self) { item in
                             Button(action: {
                                 
+                                self.didTap(button: item)
+                                
                             }, label: {
                                 Text(item.rawValue)
                                     .font(.system(size: 32))
@@ -72,7 +88,7 @@ struct ContentView: View {
                                         width: self.buttonWidth(item: item),
                                         height: self.buttonHeight(item: item)
                                     )
-                                    .background(.orange)
+                                    .background(item.buttonColor)
                                     .foregroundColor(.white)
                                     .cornerRadius(self.buttonWidth(item: item)/2)
                             })
@@ -84,7 +100,29 @@ struct ContentView: View {
         }
     }
     
+    func didTap(button: CalcButtons) {
+        switch button {
+        case .add, .sub, .divide, .multipy, .equal:
+            break
+        case .clear:
+            self.value = "0"
+        case .decimal, .negative, .remainder:
+            break
+        default:
+            let number = button.rawValue
+            if self.value == "0" {
+                value = number
+            }
+            else {
+                self.value = "\(self.value)\(number)"
+            }
+        }
+    }
+    
     func buttonWidth(item: CalcButtons)  -> CGFloat {
+        if item == .zero {
+            return  ((UIScreen.main.bounds.width - (4*12)) / 4) * 2
+        }
         return (UIScreen.main.bounds.width - (5*12)) / 4
     }
     
